@@ -1,3 +1,5 @@
+<%@page import="java.util.List"%>
+<%@page import="com.shoppingcart.dto.Admin"%>
 <%@page import="org.hibernate.internal.build.AllowSysOut"%>
 <%@page import="java.io.PrintWriter"%>
 <%@page import="com.shoppingcart.dto.Merchant"%>
@@ -24,15 +26,15 @@
    				
    				Merchant merchant=em.find(Merchant.class, id);
 				
-   				if(merchant.getMerchant_statuse().equals("Active"))
-   				{
-   					
-   				}
+   				Admin a = merchant.getAdmin() ;
+   				List<Merchant> merchants = a.getMerchant() ;
+   				merchants.remove(merchant) ;
    				
-   				
+   				a.setMerchant(merchants) ;
    				
    				
 				et.begin();
+				em.merge(a) ;
 				em.remove(merchant);
 				et.commit();
 				
